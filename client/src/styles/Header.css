@@ -1,0 +1,9 @@
+.navbar-brand {
+    padding-left: 10px;
+    font-size: xx-large !important;
+}
+
+.navbar-collapse collapse {
+    font-size: large !important;
+    padding-left: 20px;
+}

@@ -1,0 +1,22 @@
+/* .footer {
+    color: rgb(17, 14, 14);
+    background-color: #F8F0CB;
+    padding-top: 3em;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  } */
+
+.footer {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgb(218, 185, 76);
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  position: fixed;
+  padding: 10px 10px 0px 10px;
+  bottom: 0;
+  /* Height of the footer*/
+  height: 50px;
+}

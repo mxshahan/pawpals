@@ -1,0 +1,19 @@
+.petDetailItem {
+    text-transform: capitalize;
+    text-align: left;
+}
+
+.petDetailCard {
+    max-width: 300px;
+    flex-grow: 1;
+}
+
+.petDetailCardValue {
+    font-weight: bold;
+}
+
+.petDetailCardHeader {
+    font-weight: bold;
+    background-color: rgb(199, 222, 230);
+    text-align: left;
+}

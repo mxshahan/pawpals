@@ -1,0 +1,52 @@
+.adminCardFields {
+    font-weight: bold;
+}
+
+.adminListItem {
+    border: none;
+    word-break: break-all;
+}
+
+.adminListItem:first-child {
+    flex-grow: 0;
+    flex-basis: 70px;
+}
+
+.adminListItem:nth-child(2) {
+    flex-grow: 0;
+    flex-basis: 100px;
+}
+
+.adminListItem:nth-child(3) {
+    flex-grow: 0;
+    flex-basis: 130px;
+}
+
+.adminListItem:nth-child(4) {
+    flex-grow: 0;
+    flex-basis: 150px;
+}
+
+.adminListItem:nth-child(5) {
+    flex-grow: 1;
+    flex-basis: 250px;
+}
+
+.adminListContainer {
+    display: flex;
+    height: 100px;
+}
+
+.adminImage {
+    max-height: 100px;
+}
+
+.adminListGroup {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.adminImageContainer {
+    width: 200px;
+}

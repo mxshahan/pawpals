@@ -1,0 +1,41 @@
+{
+  "name": "pawpals",
+  "version": "1.0.0",
+  "description": "A pet adoption website",
+  "main": "server.js",
+  "scripts": {
+    "build": "cd client && npm run build",
+    "client": "cd client && npm run start",
+    "install": "cd client && npm install",
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:prod": "node server.js",
+    "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
+    "start:dev1": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": " "
+  },
+  "author": " ",
+  "license": "ISC",
+  "bugs": {
+    "url": " "
+  },
+  "homepage": " ",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "if-env": "^1.0.4",
+    "nodemon": "^2.0.7",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "pg": "^8.6.0"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.1"
+  }
+}

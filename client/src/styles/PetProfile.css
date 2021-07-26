@@ -1,0 +1,39 @@
+.petProfileCard {
+    margin-right: 15px;
+    height: 400px;
+}
+
+.petDetailCardLarge {
+    flex-grow: 2;
+    margin-right: 10px;
+}
+
+.petProfileImage {
+    height: 100%;
+    background-size: auto 300px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.petDetailsImage {
+    height: 100%;
+    /* background-size: 1000px auto; */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.bodyContainer {
+    width: 100%;
+}
+
+.body {
+    width: 200px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.bi {
+    float: right;    
+    cursor: pointer;
+}

@@ -3,73 +3,69 @@ const db = require('./postgresPool');
 
 const addAnimal = (params) => {
   return new Promise((resolve, reject) => {
-    db.query(animalsQ.getAll, params, (error, res) => {
+    db.query(animalsQ.addAnimal, params, (error, res) => {
       if(error) reject(error.stack);
-      resolve(res.rows);
-    });
-  });
+      if(res != undefined) resolve(res.rows);
+      else reject('no data');
+    })
+  })
 };
 
-const getAnimals = () => {
+const addDisposition = (params) => {
   return new Promise((resolve, reject) => {
-    db.query(animalsQ.getAll, [], (error, res) => {
+    db.query(animalsQ.addDisposition, params, (error, res) => {
       if(error) reject(error.stack);
-      resolve(res.rows);
-    });
-  });
+      if(res != undefined) resolve(res.rows);
+      else reject('no data');
+    })
+  })
 };
 
-// TO BE DELETED LATER
-const t = ["t.id=1", "t.name=so", "t.dd=4"];
-console.log(t.toString().split(",").join(" AND "));
-
-const getAnimalsWiFavs = ({ userID, atype, gender, breed }) => {
+const updateAvailability = (params) => {
+  console.log("in updateUserEmail, params: ",params);
   return new Promise((resolve, reject) => {
-      let query = animalsQ.getAllWiFav;
-      let where = "";
-      let and = [];
-
-      if (atype) {
-          and.push(`t.id=${atype}`);
+    db.query(animalsQ.updateAvailability, params, (error, res) => {
+      if(error) {
+        reject(error.stack);
       }
-      if (gender) {
-          and.push(`an.gender=${gender}`);
-      }
-      if (breed) {
-          and.push(`an.breedID=${breed}`);
-      }
-      if (and.length > 0) {
-          where = `WHERE ${and.join(" AND ")}`;
-      }
-
-      query += " " + where
-
-      db.query(query, [userID], (error, res) => {
-          if (error) reject(error.stack);
-          // resolve(res.rows);
-          if (res != undefined) {
-              resolve(res.rows);
-          } else {
-              reject("no data");
-          }
-      });
-  });
+      console.log(res);
+      if(res != undefined) resolve(res.rows);
+      else reject('no data');
+    })
+  })
 };
 
-const getAnimalsWiAllFilter = (id) => {
+const getAnimal = (params) => {
+  // console.log(params);
   return new Promise((resolve, reject) => {
-      db.query(animalsQ.getAllWiFav, id, (error, res) => {
-          if (error) reject(error.stack);
-          // resolve(res.rows);
-          if (res != undefined) {
-              resolve(res.rows);
-          } else {
-              reject("no data");
-          }
-      });
-  });
+    db.query(animalsQ.getAnimal, params, (error, res) => {
+      if(error) reject(error.stack);
+      // resolve(res.rows);
+      if(res != undefined) {
+        resolve(res.rows);
+      }
+      else {
+        reject('no data')
+      };
+    })
+  })
 };
 
+const getAnimalsWiFavs = (id) => {
+  // console.log(id);
+  return new Promise((resolve, reject) => {
+    db.query(animalsQ.getAllWiFav, id, (error, res) => {
+      if(error) reject(error.stack);
+      // resolve(res.rows);
+      if(res != undefined) {
+        resolve(res.rows);
+      }
+      else {
+        reject('no data')
+      };
+    })
+  })
+};
 
 const getAvailabilities = () => {
   return new Promise((resolve, reject) => {
@@ -79,15 +75,15 @@ const getAvailabilities = () => {
         resolve(res.rows);
       }
       else {
-        reject('no data');
+        reject('no data')
       };
-    });
-  }) ; 
-};
+    })
+  })  
+}
 
-const getBreeds = (atypeid) => {
+const getBreeds = () => {
   return new Promise((resolve, reject) => {
-    db.query(animalsQ.getBreeds, atypeid, (error, res) => {
+    db.query(animalsQ.getBreeds, [], (error, res) => {
       if(error) reject(error.stack);
       if(res != undefined) {
         resolve(res.rows);
@@ -95,14 +91,46 @@ const getBreeds = (atypeid) => {
       else {
         reject('no data')
       };
-    });
-  });  
-};
+    })
+  })  
+}
+
+const getDispositions = () => {
+  return new Promise((resolve, reject) => {
+    db.query(animalsQ.getDispositions, [], (error, res) => {
+      if(error) reject(error.stack);
+      if(res != undefined) {
+        resolve(res.rows);
+      }
+      else {
+        reject('no data')
+      };
+    })
+  })  
+}
+
+const getTypes = () => {
+  return new Promise((resolve, reject) => {
+    db.query(animalsQ.getTypes, [], (error, res) => {
+      if(error) reject(error.stack);
+      if(res != undefined) {
+        resolve(res.rows);
+      }
+      else {
+        reject('no data')
+      };
+    })
+  })  
+}
 
 module.exports = {
   addAnimal,
-  getAnimals,
+  getAnimal,
+  addDisposition,
+  updateAvailability,
   getAnimalsWiFavs,
   getAvailabilities,
-  getBreeds
+  getBreeds,
+  getDispositions,
+  getTypes
 };

@@ -3,11 +3,9 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const { authQ } = require('../controllers/queries.js');
 
-
 // messages
 const invalidUsername = 'The username is incorrect or not registered.';
 const invalidPass = 'The password is incorrect.';
-const successSignUp = 'Login successful';
 
 function validPassword(pass1, pass2) {
   if(pass1.localeCompare(pass2) === 0) 
@@ -15,10 +13,10 @@ function validPassword(pass1, pass2) {
   return false;
 }
 
-// step #4 is here
+// login step #4 is here
 passport.use('local-login', new LocalStrategy(
   function(username, password, done) {
-    console.log(`in passport. username: ${username}. password ${password}`);
+    // console.log(`in passport. username: ${username}. password ${password}`);
 
     db.query(authQ.login, [username], (error, user) => {
       if(user != undefined) console.log("user.rows: ",user.rows);
@@ -38,7 +36,7 @@ passport.use('local-login', new LocalStrategy(
       }
 
       // success
-      return done(null, user.rows[0], { statuscode: 200, message: successSignUp });
+      return done(null, user.rows[0], { statuscode: 200, message: 'Yup' });
     })
     
     // User.findOne({ username: username }, function (err, user) {
@@ -54,13 +52,44 @@ passport.use('local-login', new LocalStrategy(
   }
 ));
 
+passport.use('local-signup', new LocalStrategy(
+  {
+    passReqToCallback: true
+  },
+  function(req, username, password, done) {
+    const {role, email} = req.body;
+    db.query(authQ.addUser, [role, username, password, email], (error, user) => {
+      // console.log("user: ..... ",user);
+      if(user === undefined) 
+        return done(null, false, {statuscode: 401, message: invalidUsername});
+
+      // db error
+      if(error) {
+        return done(error);
+      };
+
+      // fill in user details (only id gets returned from db)
+      // so session will have necessary info
+      var userOut = {};
+      userOut.id = user.rows[0].id;
+      userOut.userroleid = role;
+      userOut.username = username;
+      userOut.email = email;
+      // console.log("userOut:  ",userOut);
+
+      // success
+      return done(null, userOut, { statuscode: 200, message: 'Yup' });     
+    })
+  }
+));
+
 // In order to help keep authentication state across HTTP requests,
 // Just consider this part boilerplate needed to make it all work
 // accesses the user obj, determines what data should be stored in session
 // the result is attached to the session as req.session.passport.user = {serialised obj}
 // result also attached to req.user
 passport.serializeUser(function(user, cb) {
-  console.log("in serialize ", user);
+  // console.log("in serialize ", user);
   cb(null, user);
 });
 

@@ -7,7 +7,6 @@ class PrivateRoute extends Component {
     const {
       component: Component, isLoggedIn, ...rest
     } = this.props;
-    console.log('here')
     
     return(
       <AuthContext>

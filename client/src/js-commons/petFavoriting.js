@@ -2,14 +2,10 @@ import axios from 'axios';
 
 // sets the icon based on heartFull value
 export function isFavorited(heartFull, setHeartFull, animalid, userId) {
-    console.log('heartFull', heartFull);
-    console.log('setHeartFull', setHeartFull);
-    console.log('animalid', animalid);
-    console.log('userId', userId);
     return (
-        heartFull ?
-            <i onClick={(event) => { heartClick(event, heartFull, setHeartFull, animalid, userId) }} className="bi bi-heart-fill"></i> :
-            <i onClick={(event) => { heartClick(event, heartFull, setHeartFull, animalid, userId) }} className="bi bi-heart"></i>)
+        heartFull ? 
+             <i onClick={(event) => {heartClick(event, heartFull, setHeartFull, animalid, userId)}} className="bi bi-heart-fill"></i> : 
+             <i onClick={(event) => {heartClick(event, heartFull, setHeartFull, animalid, userId)}} className="bi bi-heart"></i>)
 }
 
 function heartClick(event, heartFull, setHeartFull, animalid, userId) {
@@ -21,12 +17,12 @@ function heartClick(event, heartFull, setHeartFull, animalid, userId) {
 
 function favorite(animalId, userId) {
     axios.post(`/api/addFav/${animalId}/${userId}`)
-        .then()
-        .catch(err => console.log(err));
+    .then()
+    .catch(err => console.log(err));
 }
 
 function unfavorite(animalId, userId) {
     axios.delete(`/api/deleteFav/${animalId}/${userId}`)
-        .then()
-        .catch(err => console.log(err));
+    .then()
+    .catch(err => console.log(err));
 }

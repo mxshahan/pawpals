@@ -3,7 +3,9 @@ import { AuthContext } from './AuthContext';
 import { BasicModal } from "./Common";
 import { LoginTabs } from "."
 import { Nav, Button } from "react-bootstrap";
+import { useSnackbar } from 'notistack';
 import axios from 'axios';
+import * as Enum from './Common/Enum';
 import * as Msgs from './Common/Messages';
 import * as Utils from './Utils';
 
@@ -52,18 +54,17 @@ const data = {
 
 // handles the login button click (opens modal)
 const handleLogin = (setLoginModalOpen) => {
-    console.log("handlelogin");
     setLoginModalOpen(true);
 }
 
 // handles modal close; passed to common modal component
 const handleLoginClose = (setLoginModalOpen) => {
-    console.log("handle login close");
     setLoginModalOpen(false);
 }
 
 export default function LoginSignUp() {
     const context = useContext(AuthContext);
+    const { enqueueSnackbar } = useSnackbar();
     const [loginModalOpen, setLoginModalOpen] = useState(false);
     const [modalType, setModalType] = useState('login');
     const [title, setTitle] = useState('');
@@ -76,9 +77,7 @@ export default function LoginSignUp() {
 
     function handleChange(inputName, valueIn) {
         // set form input values
-        console.log(inputName, valueIn)
         setFields(prev => prev.map(s => {
-            console.log(prev);
             if(s.name === inputName) {
                 return {...s, value:valueIn}
             }
@@ -102,8 +101,6 @@ export default function LoginSignUp() {
         }
     }
 
-    // used to validate username when signing up (username must be unique)
-    // to-do: handle this on backend
     function getAllUsernames() {
         axios.get('/api/getAllUsernames')
         .then(res => {
@@ -116,85 +113,85 @@ export default function LoginSignUp() {
 
     // handles when login is completed
     function handleSave(setLoginModalOpen, modalType, fields, usernames) {
-        // console.log(fields);
         // send new account creation info to API; get userID in response and keep track of the fact that we are logged in
         setLoginModalOpen(false);
-        var username = fields[0].value;
-        var pass;
 
-        if (modalType === 'login'){
-            pass = fields[1].value;
-            console.log('handleLoginSave', username, pass);
-            // keep track of the fact that we are logged in...get userId from API
-            // axios to check if username/pass are correct
-            // go to authRoutes.js
-            axios.post('/auth/login', {username: username, password: pass})
-                .then(res => {
-                    console.log(res.data);
-                    if(res?.data.statuscode === 401) {
-                        // to-do: display msg to user
-                        console.log(res.data.message);
-                    }
-                    else if(res?.data.statuscode === 200) {
-                        // to-do: display success msg to user
-                        console.log('.........\nmessage: ',res.data.message);
-                        console.log(Msgs.successSignUp);
-                        
-                        // update context
-                        context.setIsLoggedIn(true);
-                        context.setUserName(res.data.user.username);
-                        context.setUserID(res.data.user.userroleid);
-                        context.setUserRole(res.data.user.userroleid);
-                    }
-                })
-                .catch(() => {
-                    // to-do: display msg to user
-                    console.log(Msgs.error500);
-                });
-        } 
-        
-        else if (modalType === 'signup'){
-            var email = fields[1].value;
-            pass = fields[2].value;
-            // var newid;  // to-do: handle this with log in
-            if(Utils.validateEmail(email) && validateUsername(username, usernames)) {
-                // only regular users sign up here
-                axios.post(`/api/addUser/1/${username}/${pass}/${email}`)
-                .then(res => {
-                    console.log(Msgs.successSignUp);
-                    console.log("new user id: ", res?.data[0].id);
-                    // newid = res.data[0].id;
-
-                    // reset form and validations
-                    setIsValidEmail(false);
-                    setIsValidPass(false);
-                    setIsValidUsername(false);
-                    setFields(prev => prev.map(s => {
-                        return {...s, value:''}
-                    }))
-                })
-                .catch(err => console.log(Msgs.unsuccessfulSignUp + err))
-            }
-            else {
-                console.log(Msgs.invalidForm);
-            }
+        if (modalType === 'login') {
+            login(fields);
+        } else {
+            signup(fields, usernames);
         };
     }
 
-    // username must be unique
-    function validateUsername(name, usernames) {
-        if(usernames.some(d => d.toLowerCase() === name.toLowerCase())) {
-            console.log(Msgs.invalidUsername);
-            return false;
-        }
-        return true;
+    // update context after signing up or logging in
+    function updateContext(user) {
+        context.setIsLoggedIn(true);
+        context.setUserName(user.username);
+        context.setUserID(user.id);
+        context.setUserRole(user.userroleid);
     }
 
-    // function Utils.validateEmail(email) {
-    //     var patt = /^\S+@\S+\.\S+$/;
-    //     if(email.match(patt)) return true;
-    //     return false;
-    // }
+    // function login(fields, usernames) {
+    function login(fields) {
+        var username = fields[0]?.value;
+        var pass = fields[1]?.value;
+
+        // axios to check if username/pass are correct
+        // go to authRoutes.js
+        axios.post('/auth/login', {username: username, password: pass})
+            .then(res => {
+                if(res?.data.statuscode === 401) {
+                    enqueueSnackbar(res.data.message, {variant: Enum.Variant.error});
+                }
+                else if(res?.data.statuscode === 200) {
+                    // console.log('.........\nmessage: ',res.data);
+                    enqueueSnackbar(Msgs.successLogin, {variant: Enum.Variant.success});
+                    
+                    updateContext(res.data.user);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                enqueueSnackbar(Msgs.error500, {variant: Enum.Variant.error});
+            });
+    }
+
+    function signup(fields, usernames) {
+        var username = fields[0]?.value;
+        var email = fields[1]?.value;
+        var pass = fields[2]?.value;
+        var roleID = 1;
+
+        if(!Utils.validateUsername(username, usernames)) {
+            enqueueSnackbar(Msgs.invalidUsername, {variant: Enum.Variant.error});
+        }
+        else if(!Utils.validateEmail(email)) {
+            enqueueSnackbar(Msgs.invalidEmail, {variant: Enum.Variant.error});
+        }
+        else {
+            var params = {
+                role: roleID, 
+                username: username, 
+                password: pass, 
+                email: email
+            };
+            // only regular users sign up here
+            axios.post('/auth/signup', params)
+            .then(res => {
+                if(res?.data.statuscode === 401) {
+                    enqueueSnackbar(res.data.message, {variant: Enum.Variant.error});
+                }
+                else if(res?.data.statuscode === 200) {
+                    enqueueSnackbar(Msgs.successSignUp, {variant: Enum.Variant.success});
+                    updateContext(res.data.user);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                enqueueSnackbar(Msgs.unsuccessfulSignUp, {variant: Enum.Variant.error});
+            })
+        }
+    }
 
     // will perform the following actions on render when modalType variable changes
     useEffect(() => {
@@ -208,7 +205,7 @@ export default function LoginSignUp() {
         <>
             <BasicModal 
                 show={loginModalOpen}
-                handleClose={() => handleLoginClose(setLoginModalOpen)}
+                handleClose={() => handleLoginClose(setLoginModalOpen,isValidEmail, isValidPass, isValidUsername)}
                 handleSave={() => handleSave(setLoginModalOpen, modalType, fields, usernames)}
                 title={title}
                 handleChange={(e, v) => handleChange(e, v)}

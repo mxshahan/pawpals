@@ -39,7 +39,7 @@ export default function BasicModal({
         {/* Render the various inputs/dropdowns needed */}
         <div className='modalFields'>
           {fields && fields.map((x) => {
-            console.log(x, x.value);
+            // console.log(x, x.value);
             return (
               <ItemsWithControl 
                 key={x.name}

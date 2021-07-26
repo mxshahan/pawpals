@@ -1,14 +1,7 @@
 import React from "react";
 import { Card, ListGroup } from "react-bootstrap";
 import "../../styles/CardListGroup.css"
-
-const handleArrayItem = (item) => {
-    if(Array.isArray(item)){
-        return item.join(', ');
-    }else{
-        return item;
-    }
-};
+import * as Utils from '../Utils';
 
 export default function BasicCardListGroup({
     header = '',
@@ -16,6 +9,7 @@ export default function BasicCardListGroup({
     className = {},
     listItems = {}
 }) {
+
     return (
         <Card className={className.card}>
             {header && <Card.Header className={className?.header}>{header}</Card.Header>}
@@ -26,9 +20,14 @@ export default function BasicCardListGroup({
                                 <span className={className?.key}>
                                     {key + ': '}
                                 </span> 
-                                <span className={className?.value}>
-                                    {handleArrayItem(listItems[key])}
+
+                                <span className={key === 'availability'
+                                    ? Utils.getClassName(listItems[key])
+                                    : className?.value    
+                                }>
+                                    {listItems[key]}
                                 </span>
+                            
                             </ListGroup.Item>
                         );
                     })

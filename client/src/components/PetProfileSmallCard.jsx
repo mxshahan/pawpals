@@ -11,7 +11,7 @@ export default function PetProfileSmallCard({
 
     useEffect(() => {
         // if the animal is favorited, make our heart icon a full icon
-        if (animal?.favuserid != null) {
+        if (animal?.favuserid != null){
             setHeartFull(true);
         }
     }, [animal]);
@@ -22,13 +22,13 @@ export default function PetProfileSmallCard({
     }
 
     return (
-        <BasicCard
+        <BasicCard 
             key={animal?.animalid}
-            title={animal?.aname}
-            body={animal?.availability}
-            icon={context.isLoggedIn ?    // if no user is logged in, don't show an icon
-                isFavorited(heartFull, setHeartFull, animal.animalid, context.userID)
-                : null}
+            title={animal?.aname} 
+            body={animal?.availability} 
+            icon={  context.isLoggedIn ?    // if no user is logged in, don't show an icon
+                    isFavorited(heartFull, setHeartFull, animal.animalid, context.userID)
+                    : null } 
             image={animal?.imageurl}
             className={classNames}
         />

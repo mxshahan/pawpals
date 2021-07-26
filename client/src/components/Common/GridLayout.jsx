@@ -10,13 +10,13 @@ export default function GridLayout({
     return (
         <Container>
             <Row xs={2} md={4} lg={6}>
-                {cardData.map((x) => {
-                    return (
-                        <Link key={x.animalid} to={`/pet-profile/${x.animalid}`} className={"link"}>
-                            <PetProfileSmallCard key={x.animalid} animal={x} />
-                        </Link>
-                    );
-                })}
+            {cardData.map((x) => {
+                return (
+                    <Link key={x.animalid} to={`/pet-profile/${x.animalid}`} className={"link"}>
+                        <PetProfileSmallCard key={x.animalid} animal={x} />
+                    </Link>
+                );
+            })}
             </Row>
         </Container>
     );

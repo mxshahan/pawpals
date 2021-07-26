@@ -113,6 +113,7 @@ CREATE TABLE IF NOT EXISTS favorites(
   animalID INT not null,
   userID INT not null,
   primary key (id),
+  UNIQUE(animalID, userID),
   CONSTRAINT animalFK FOREIGN KEY(animalID) REFERENCES animals(id) ON DELETE CASCADE,
   CONSTRAINT userFK FOREIGN KEY(userID) REFERENCES users(id) ON DELETE CASCADE 
 );

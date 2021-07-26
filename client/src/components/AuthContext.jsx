@@ -6,14 +6,13 @@ import axios from 'axios';
 export default function AuthProvider(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(true); //will want to change
   const [dataSet, setDataSet] = useState(false);
   const [userName, setUserName] = useState(null);
   const [userID, setUserID] = useState(null);
   const [userRole, setUserRole] = useState(null);
   
   function reset() {
-    console.log("in authContext, resetting...", isLoggedIn);
+    // console.log("in authContext, resetting...", isLoggedIn);
     if(!isLoggedIn) {
       setUserName(null);
       setUserID(null);
@@ -23,8 +22,8 @@ export default function AuthProvider(props) {
 
   useEffect(() => {
     async function isAuthenticated() {
-      console.log('in AuthContext')
-      console.log(userName, userID, userRole);
+      // console.log('in AuthContext')
+      // console.log(userName, userID, userRole);
       axios.get('/auth/isAuthenticated')
         .then(res => {
           // console.log("is loggedIn: ",res.data)
@@ -47,6 +46,7 @@ export default function AuthProvider(props) {
       // console.log("in getSession()");
       axios.get('/auth/getSession')
         .then(res => {
+          // console.log("getsession res: ",res)
           setUserName(res.data.username);
           setUserID(res.data.id);
           setUserRole(res.data.userroleid);

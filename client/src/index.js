@@ -10,7 +10,13 @@ import { SnackbarProvider } from 'notistack';
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <SnackbarProvider maxSnack={3}>
+      <SnackbarProvider 
+        maxSnack={3}
+        anchorOrigin= {{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
         <App />
       </SnackbarProvider>
     </BrowserRouter>

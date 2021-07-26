@@ -12,6 +12,19 @@
     font-weight: bold;
 }
 
+.adpoted {
+    color: red;
+}
+.available {
+    color: green;
+}
+.pending {
+    color: blue;
+}
+.unavailable {
+    color: grey;
+}
+
 .petDetailCardHeader {
     font-weight: bold;
     background-color: rgb(199, 222, 230);

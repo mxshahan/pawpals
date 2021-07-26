@@ -3,7 +3,7 @@ import { ListGroup, Image } from "react-bootstrap";
 import "../../styles/BasicHorizontalList.css"
 
 export default function BasicHorizontalList({
-    key = null,
+    keyid = null,
     image = '',
     itemKeys = {},
     items = {},
@@ -14,10 +14,10 @@ export default function BasicHorizontalList({
     return (
         <div className={className.listContainer}>
             {image && <div className={className.imageContainer}><Image src={image} rounded className={className.image} /></div>}
-            <ListGroup horizontal key={key} className={className.listGroup}>
+            <ListGroup horizontal key={keyid} className={className.listGroup}>
                 {Object.keys(itemKeys).map((key) => {
                     return (
-                        <ListGroup.Item className={className.listItem}>
+                        <ListGroup.Item className={className.listItem} key={key}>
                             <div className={className.field}>{itemKeys[key]}</div>
                             <div className={className.value}>{items[key]}</div>
                         </ListGroup.Item>

@@ -14,6 +14,19 @@ const addFav = (ids) => {
   })
 };
 
+const addUser = (params) => {
+  // console.log("in addUsers, id: ",params);
+  return new Promise((resolve, reject) => {
+    db.query(usersQ.addUser, params, (error, res) => {
+      if(error) {
+        reject(error.stack);
+      }
+      if(res != undefined) resolve(res.rows);
+      else reject('no data');
+    })
+  })
+};
+
 const deleteFav = (ids) => {
   // console.log("in deletefavs, id: ",ids);
   return new Promise((resolve, reject) => {
@@ -70,13 +83,13 @@ const getFavs = (id) => {
 };
 
 const updateUserEmail = (params) => {
-  console.log("in updateUserEmail, params: ",params);
+  // console.log("in updateUserEmail, params: ",params);
   return new Promise((resolve, reject) => {
     db.query(usersQ.updateUserEmail, params, (error, res) => {
       if(error) {
         reject(error.stack);
       }
-      console.log(res);
+      // console.log(res);
       if(res != undefined) resolve(res.rows);
       else reject('no data');
     })
@@ -99,7 +112,7 @@ const updateUserPass = (params) => {
 
 module.exports = {
   addFav,
-  // addUser,
+  addUser,
   deleteFav,
   deleteUser,
   getAllUsernames,

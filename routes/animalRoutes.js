@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const animalsController = require('../controllers/animalsController');
 const checkAuthentication = require('../config/isAuthenticated');
+const animalsModel = require("../controllers/animalsController");
+
 
 // addAnimal: 'INSERT INTO animals (aName, gender, aDescription, breedID, aTypeID, availabilityID, updatedByID, dateAdded, dateUpdated, imageURL) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);',
 
@@ -50,13 +52,21 @@ router.put('/updateAvailability/:availability/:animalID', checkAuthentication, (
     .catch(error => results.status(500).json(error));
 });
 
-router.get('/getAnimalsWiFavs/:id', (req, results) => {
-  animalsController.getAnimalsWiFavs([req.params.id])
+router.get("/getAnimalsWiFavs", (req, results) => {
+  const { userID, atype, gender, breed } = req.query;
+  animalsModel.getAnimalsWiFavs({
+    userID,
+    atype,
+    gender,
+    breed,
+  })
     .then(res => {
-      results.status(200).send(res)
+      console.log({ RES: res });            // TO BE DELETED
+      results.status(200).send(res);
     })
     .catch(error => {
-      results.status(500).json(error)
+      console.log({ ERR: error });          // TO BE DELETED
+      results.status(500).json(error);
     });
 });
 
@@ -70,15 +80,6 @@ router.get('/getAvailabilities/', (req, results) => {
     });
 });
 
-router.get('/getBreeds/', (req, results) => {
-  animalsController.getBreeds()
-    .then(res => {
-      results.status(200).send(res)
-    })
-    .catch(error => {
-      results.status(500).json(error)
-    });
-});
 
 router.get('/getDispositions/', (req, results) => {
   animalsController.getDispositions()
@@ -97,6 +98,17 @@ router.get('/getTypes/', (req, results) => {
     })
     .catch(error => {
       results.status(500).json(error)
+    });
+});
+
+router.get("/getBreeds/:atype", (req, results) => {
+  animalsModel
+    .getBreeds([req.params.atype])
+    .then(res => {
+      results.status(200).send(res);
+    })
+    .catch(error => {
+      results.status(500).json(error);
     });
 });
 
